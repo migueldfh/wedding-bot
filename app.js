@@ -98,11 +98,11 @@ client.on('message', async (message) => {
 client.initialize();
 
 // API Endpoints
-app.get('/status', authMiddleware, (req, res) => {
+app.get('/status', (req, res) => {
   res.json({ status: clientStatus });
 });
 
-app.get('/qr', authMiddleware, (req, res) => {
+app.get('/qr', (req, res) => {
   if (qrCode) {
     res.json({ qrCode });
   } else {
@@ -110,7 +110,7 @@ app.get('/qr', authMiddleware, (req, res) => {
   }
 });
 
-app.post('/send', authMiddleware, async (req, res) => {
+app.post('/send', async (req, res) => {
   try {
     const { phone, message } = req.body;
     
@@ -141,7 +141,7 @@ app.post('/send', authMiddleware, async (req, res) => {
 });
 
 // Simple admin interface
-app.get('/admin', authMiddleware, (req, res) => {
+app.get('/admin', (req, res) => {
   res.send(`
     <html>
       <head>
