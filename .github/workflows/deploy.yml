@@ -23,7 +23,7 @@ jobs:
       - name: SSH into droplet and deploy
         run: |
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
-            cd /home/botuser/whatsapp-bot
+            cd /home/botuser/wedding-bot
             git pull origin main
             npm install
             pm2 restart app
