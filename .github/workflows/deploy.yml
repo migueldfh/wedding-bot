@@ -1,0 +1,30 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main  # or your deployment branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy code
+      run: |
+        ssh -i ~/.ssh/id_ed25519 ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+          cd /path/to/your/app
+          git pull origin main
+          npm install  # or any build/start steps you need
+          pm2 restart app  # or your restart command
+        EOF
