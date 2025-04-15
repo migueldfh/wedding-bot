@@ -16,14 +16,14 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H your_droplet_ip >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
 
       - name: SSH into droplet and deploy
         run: |
-          ssh -i ~/.ssh/id_ed25519 botuser@your_droplet_ip << 'EOF'
-            cd /home/botuser/your-app-directory
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+            cd /home/botuser/whatsapp-bot
             git pull origin main
             npm install
             pm2 restart app
