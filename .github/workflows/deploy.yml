@@ -31,7 +31,7 @@ jobs:
 
     - name: Deploy code
       run: |
-        ssh -i /home/botuser/.ssh/id_ed25519 ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+        ssh -i ~/.ssh/id_ed25519 ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
           cd /home/botuser/whatsapp-bot 
           git pull origin main
           npm install
