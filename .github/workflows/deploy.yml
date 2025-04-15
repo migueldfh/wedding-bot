@@ -20,6 +20,11 @@ jobs:
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
 
+    - name: Check if private key exists
+      run: |
+        ls -l ~/.ssh/id_ed25519
+        cat ~/.ssh/id_ed25519  # This will confirm the key is there
+
     - name: Deploy code
       run: |
         ssh -i /home/botuser/.ssh/id_ed25519 ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
