@@ -23,8 +23,8 @@ jobs:
     - name: Deploy code
       run: |
         ssh -i ~/.ssh/id_ed25519 ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
-          cd /path/to/your/app
+          cd /home/botuser/whatsapp-bot 
           git pull origin main
-          npm install  # or any build/start steps you need
-          pm2 restart app  # or your restart command
+          npm install
+          pm2 restart app
         EOF
