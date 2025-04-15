@@ -25,6 +25,10 @@ jobs:
         ls -l ~/.ssh/id_ed25519
         cat ~/.ssh/id_ed25519  # This will confirm the key is there
 
+    - name: Test SSH connection
+      run: |
+        ssh -v -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no botuser@167.99.105.176 echo "SSH works!"
+
     - name: Deploy code
       run: |
         ssh -i /home/botuser/.ssh/id_ed25519 ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
