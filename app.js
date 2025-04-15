@@ -211,7 +211,7 @@ app.get('/admin', authMiddleware, (req, res) => {
                 const data = await response.json();
                 // Use a QR code library to display the QR code
                 document.getElementById('qrImage').innerHTML = 
-                  `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data.qrCode)}">`;
+                  '<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(data.qrCode) + '" />';
               } else {
                 document.getElementById('qrImage').innerHTML = 'QR code not available';
               }
@@ -245,7 +245,7 @@ app.get('/admin', authMiddleware, (req, res) => {
               if (response.ok) {
                 resultElement.innerHTML = '<p style="color: green;">Message sent successfully!</p>';
               } else {
-                resultElement.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                resultElement.innerHTML = '<p style="color: red;">Error: ' + data.error + '</p>';
               }
             } catch (error) {
               console.error('Error sending message:', error);
