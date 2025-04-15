@@ -11,13 +11,13 @@ const app = express();
 app.use(bodyParser.json());
 
 // Authentication middleware
-const authMiddleware = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader !== `Bearer ${process.env.API_TOKEN}`) {
-    return res.status(403).json({ error: 'Unauthorized' });
-  }
-  next();
-};
+// const authMiddleware = (req, res, next) => {
+//   const authHeader = req.headers.authorization;
+//   if (authHeader !== `Bearer ${process.env.API_TOKEN}`) {
+//     return res.status(403).json({ error: 'Unauthorized' });
+//   }
+//   next();
+// };
 
 // Initialize WhatsApp client
 const client = new Client({
