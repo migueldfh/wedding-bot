@@ -43,17 +43,17 @@ let qrCode = null;
 let clientStatus = 'initializing';
 
 // Initialize whatsapp-web client
+client.on('ready', () => {
+  console.log('Client is ready!');
+  clientStatus = 'ready';
+  qrCode = null;
+});
+
 client.on('qr', (qr) => {
   console.log('QR RECEIVED', qr);
   qrCode = qr;
   qrcode.generate(qr, { small: true });
   clientStatus = 'qr_ready';
-});
-
-client.on('ready', () => {
-  console.log('Client is ready!');
-  clientStatus = 'ready';
-  qrCode = null;
 });
 
 client.on('authenticated', () => {
