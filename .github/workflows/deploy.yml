@@ -1,39 +1,23 @@
-name: Deploy to DigitalOcean
-
-on:
-  push:
-    branches:
-      - main  # or your deployment branch
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H your_droplet_ip >> ~/.ssh/known_hosts
 
-    - name: Check if private key exists
-      run: |
-        ls -l ~/.ssh/id_ed25519
-        cat ~/.ssh/id_ed25519  # This will confirm the key is there
-
-    - name: Test SSH connection
-      run: |
-        ssh -v -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no botuser@167.99.105.176 echo "SSH works!"
-
-    - name: Deploy code
-      run: |
-        ssh -i ~/.ssh/id_ed25519 ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
-          cd /home/botuser/whatsapp-bot 
-          git pull origin main
-          npm install
-          pm2 restart app
-        EOF
+      - name: SSH into droplet and deploy
+        run: |
+          ssh -i ~/.ssh/id_ed25519 botuser@your_droplet_ip << 'EOF'
+            cd /home/botuser/your-app-directory
+            git pull origin main
+            npm install
+            pm2 restart app
+          EOF
