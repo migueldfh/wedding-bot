@@ -20,21 +20,57 @@ app.use(bodyParser.json());
 // };
 
 // Initialize WhatsApp client
-const client = new Client();
+const client = new Client({
+  authStrategy: new LocalAuth({
+    dataPath: './whatsapp-session'
+  }),
+  puppeteer: {
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-accelerated-2d-canvas',
+      '--no-first-run',
+      '--no-zygote',
+      '--disable-gpu'
+    ]
+  }
+});
 
 // Keep track of the QR code and client status
 let qrCode = null;
 let clientStatus = 'initializing';
 
 // Initialize whatsapp-web client
+client.on('ready', () => {
+  console.log('Client is ready!');
+  clientStatus = 'ready';
+  qrCode = null;
+});
+
 client.on('qr', (qr) => {
+  console.log('QR RECEIVED', qr);
   qrCode = qr;
   qrcode.generate(qr, { small: true });
   clientStatus = 'qr_ready';
 });
 
-client.on('ready', () => {
-  console.log('Client is ready!');
+client.on('authenticated', () => {
+  console.log('AUTHENTICATED');
+  clientStatus = 'authenticated';
+});
+
+client.on('auth_failure', (msg) => {
+  console.error('AUTHENTICATION FAILURE', msg);
+  clientStatus = 'auth_failure';
+});
+
+client.on('disconnected', (reason) => {
+  console.log('Client was disconnected', reason);
+  clientStatus = 'disconnected';
+  // Attempt to reconnect
+  client.initialize();
 });
 
 // Bot message processing
